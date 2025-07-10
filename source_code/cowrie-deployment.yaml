@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cowrie-honeypot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cowrie
+  template:
+    metadata:
+      labels:
+        app: cowrie
+    spec:
+      containers:
+      - name: cowrie
+        image: cowrie/cowrie
+        ports:
+        - containerPort: 2222
+        volumeMounts:
+        - mountPath: /cowrie/var/log
+          name: cowrie-logs
+      volumes:
+      - name: cowrie-logs
+        hostPath:
+          path: /home/honeypot-vm/cowrie-logs
+          type: DirectoryOrCreate
